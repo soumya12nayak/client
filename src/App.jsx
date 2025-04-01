@@ -1,0 +1,60 @@
+import { useContext } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import Home from './pages/Home'
+import ApplyJob from './pages/ApplyJob'
+import Applications from './pages/Applications'
+import RecruiterLogin from './components/RecruiterLogin'
+import { AppContext } from './context/AppContext'
+import Dashboard from './pages/Dashboard'
+import AddJob from './pages/AddJob'
+import ManageJobs from './pages/ManageJobs'
+import ViewApplications from './pages/ViewApplications'
+import 'quill/dist/quill.snow.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Membership from './pages/Membership'
+import Contact from "./pages/Contact";
+import Webinars from "./pages/Webinars";
+import Assessment from "./pages/SkillAssessment";
+import Quiz from "./components/Quiz";
+import Certificate from "./pages/Certificate";
+import CareerRoadmap from "./pages/CareerRoadmap";
+
+// import QuickLinkPage from './pages/QuickLinkPage';
+
+const App = () => {
+
+  const { showRecruiterLogin, companyToken } = useContext(AppContext)
+
+  return (
+    <div>
+      {showRecruiterLogin && <RecruiterLogin />}
+      <ToastContainer />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path="/membership" element={<Membership />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/webinars" element={<Webinars />} /> {/* ✅ Correct path */}
+        <Route path="/assessment" element={<Assessment />} />
+        <Route path="/quiz/:skill" element={<Quiz />} />
+        <Route path="/certificate/:skill" element={<Certificate />} />
+        <Route path="/roadmap" element={<CareerRoadmap />} />
+
+        {/* <Route path="/:linkType" element={<QuickLinkPage />} /> */}
+        <Route path='/apply-job/:id' element={<ApplyJob />} />
+        <Route path='/applications' element={<Applications />} />
+        <Route path='/dashboard' element={<Dashboard />}>
+          {
+            companyToken ? <>
+              <Route path='add-job' element={<AddJob />} />
+              <Route path='manage-jobs' element={<ManageJobs />} />
+              <Route path='view-applications' element={<ViewApplications />} />
+            </> : null
+          }
+        </Route>
+      </Routes>
+    </div>
+  )
+}
+
+export default App

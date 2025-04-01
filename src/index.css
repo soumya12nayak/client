@@ -1,0 +1,400 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+  font-family: Outfit;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+::-webkit-scrollbar{
+  display: none;
+}
+
+.rich-text { font-size: 15px; color: #7A7B7D; }
+
+.rich-text p { margin-bottom: 16px; }
+
+.rich-text h1 { font-size: 36px; font-weight: 800; color: #252525; margin: 32px 0; }
+
+.rich-text h2 { font-size: 22px; font-weight: 700; color: #252525; margin: 24px 0; }
+
+.rich-text h3 { font-size: 18px; font-weight: 600; color: #333333; margin: 20px 0; }
+
+.rich-text h4 { font-size: 16px; font-weight: 500; color: #444444; margin: 16px 0; }
+
+.rich-text h5 { font-size: 14px; font-weight: 400; color: #555555; margin: 12px 0; }
+
+.rich-text h6 { font-size: 12px; font-weight: 400; color: #666666; margin: 8px 0; }
+
+.rich-text strong { font-weight: 700; }
+
+.rich-text ol { margin-left: 30px; list-style-type: decimal; }
+
+.rich-text ul { margin-left: 30px; list-style-type: disc; }
+
+.rich-text li { margin-bottom: 8px; }
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+
+@keyframes slideInFade {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideInFade 0.4s ease-out forwards;
+}
+
+/* Optional hover glow effect for social icons */
+/* img:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.7));
+} */
+
+
+.animate-pulse {
+  animation: pulse 1.5s infinite;
+}
+.animate-bounce {
+  animation: bounce 1s ease-in-out 1;
+}
+
+body, html {
+  overflow-x: hidden;
+}
+
+
+
+
+.bg-home {
+  background: radial-gradient(circle, #00172D, #010A13);
+  overflow: hidden;
+  position: relative;
+  z-index: 0; /* Keeps it behind all other elements */
+}
+
+.bg-home::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("https://images.unsplash.com/photo-1642635715930-b3a1eba9c99f?q=80&w=2078&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  opacity: 0.2;
+  animation: starsTwinkle 4s infinite alternate;
+  pointer-events: none; /* ✅ Prevents blocking clicks */
+  z-index: -1; /* ✅ Ensures background is behind everything */
+}
+
+@keyframes starsTwinkle {
+  from { opacity: 0.2; }
+  to { opacity: 0.4; }
+}
+
+/* ✅ Ensure all interactive elements are above the background */
+.bg-home > * {
+  position: relative;
+  z-index: 1; /* ✅ Keeps all elements above the background */
+}
+
+
+
+/* From Uiverse.io by satyamchaudharydev */ 
+.resu {
+  --primary-color: #1b07f6;
+  --secondary-color: #ffffff;
+  --hover-color: #111;
+  --arrow-width: 12px;
+  --arrow-stroke: 2px;
+  box-sizing: border-box;
+  border: 2px solid var(--primary-color); /* Adds a subtle outline */
+  border-radius: 12px;
+  color: var(--secondary-color);
+  padding: 0.6em 1.2em;
+  background: linear-gradient(45deg, #1b07f6, #5907f6);
+  display: flex;
+  align-items: center;
+  gap: 0.8em;
+  font-weight: bold;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 0px 8px rgba(27, 7, 246, 0.6);
+  overflow: hidden;
+}
+
+.resu .arrow-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.resu .aro {
+  width: var(--arrow-width);
+  height: var(--arrow-stroke);
+  background: var(--secondary-color);
+  position: relative;
+  transition: 0.3s ease-in-out;
+}
+
+.resu .aro::before {
+  content: "";
+  position: absolute;
+  border: solid var(--secondary-color);
+  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  display: inline-block;
+  top: -3px;
+  right: 3px;
+  padding: 3px;
+  transform: rotate(-45deg);
+  transition: 0.3s ease-in-out;
+}
+
+/* Glowing Effect on Hover */
+.resu:hover {
+  background: linear-gradient(90deg, #1b07f6, #ff00ff);
+  box-shadow: 0px 0px 16px rgba(255, 0, 255, 0.8);
+  border-color: #ff00ff;
+}
+
+.resu:hover .aro {
+  background: var(--secondary-color);
+  transform: translateX(4px);
+}
+
+.resu:hover .aro::before {
+  right: -2px;
+}
+
+/* Animated Glow Pulse */
+@keyframes glow {
+  0% {
+    box-shadow: 0px 0px 8px rgba(27, 7, 246, 0.6);
+  }
+  50% {
+    box-shadow: 0px 0px 16px rgba(255, 0, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0px 0px 8px rgba(27, 7, 246, 0.6);
+  }
+}
+
+.resu:hover {
+  animation: glow 1.5s infinite;
+}
+
+
+/* From Uiverse.io by TimTrayler */ 
+.bitten {
+  --hover-shadows: 16px 16px 33px #121212, -16px -16px 33px #303030;
+  --accent: fuchsia;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  border: none;
+  border-radius: 1.1em;
+  background-color: #212121;
+  cursor: pointer;
+  color: white;
+  padding: 1em 2em;
+  transition: box-shadow ease-in-out 0.3s, background-color ease-in-out 0.1s,
+    letter-spacing ease-in-out 0.1s, transform ease-in-out 0.1s;
+  box-shadow: 13px 13px 10px #1c1c1c, -13px -13px 10px #262626;
+}
+
+.bitten:hover {
+  box-shadow: var(--hover-shadows);
+}
+
+.bitten:active {
+  box-shadow: var(--hover-shadows), var(--accent) 0px 0px 30px 5px;
+  background-color: var(--accent);
+  transform: scale(0.95);
+}
+
+
+/* Fullscreen Loader */
+.loader-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle, #020024 10%, #090979 40%, #00d4ff 90%);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Energy Core Glow */
+.energy-core {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rotating Cube */
+.core-spin {
+  width: 80px;
+  height: 80px;
+  transform-style: preserve-3d;
+  animation: rotateCube 4s infinite linear;
+  position: relative;
+}
+
+/* Sides of the Cube */
+.side {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: rgba(0, 255, 255, 0.2);
+  border: 2px solid cyan;
+  box-shadow: 0 0 20px cyan;
+}
+
+/* Positioning each side */
+.front  { transform: rotateY(  0deg) translateZ(40px); }
+.back   { transform: rotateY(180deg) translateZ(40px); }
+.top    { transform: rotateX( 90deg) translateZ(40px); }
+.bottom { transform: rotateX(-90deg) translateZ(40px); }
+.left   { transform: rotateY(-90deg) translateZ(40px); }
+.right  { transform: rotateY( 90deg) translateZ(40px); }
+
+/* Glowing Core */
+.core-glow {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.8), rgba(0, 255, 255, 0));
+  border-radius: 50%;
+  filter: blur(10px);
+  animation: glowPulse 2s infinite alternate;
+}
+
+/* Animations */
+@keyframes rotateCube {
+  0% { transform: rotateX(0deg) rotateY(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.1); }
+}
+
+
+
+.fixed {
+  isolation: isolate; /* ✅ Makes sure it stays above other elements */
+}
+
+.navbar-bg {
+  background: linear-gradient(135deg, #4ca1af, #2c3e50);
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
+  border-bottom: 2px solid rgba(46, 204, 113, 0.3);
+
+  
+  transition: all 0.3s ease-in-out;
+}
+
+
+.smky-btn3 {
+  position: relative;
+  color: #ffffff;
+  background: transparent;
+  padding: 6px 18px; /* Reduced padding */
+  overflow: hidden;
+  z-index: 1;
+  border: 1.5px solid transparent; /* Slightly thinner border */
+  border-radius: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-in-out;
+  font-size: 0.85rem; /* Slightly smaller text */
+  cursor: pointer;
+}
+
+/* Expanding neon background effect */
+.smky-btn3::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250%; /* Smaller expansion */
+  height: 250%;
+  background: radial-gradient(circle, #ff00ff 0%, #1b07f6 50%, #00eaff 100%);
+  transition: all 0.4s ease-in-out;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: -1;
+  border-radius: 50%;
+}
+
+/* Animated neon border */
+.smky-btn3::after {
+  content: "";
+  position: absolute;
+  height: 1.5px; /* Thinner line */
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, #ff00ff, #1b07f6, #00eaff);
+  transition: all 0.4s ease-in-out;
+  z-index: -1;
+}
+
+/* Hover Effects */
+.smky-btn3:hover {
+  color: #000000;
+  background: none;
+  border-color: #ffffff;
+  box-shadow: 0px 0px 15px rgba(27, 7, 246, 0.6); /* Reduced glow intensity */
+  animation: shake 0.15s linear infinite alternate;
+}
+
+.smky-btn3:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0.7;
+}
+
+.smky-btn3:hover::after {
+  height: 100%;
+}
+
+/* Subtle Glitch Animation */
+@keyframes shake {
+  0% { transform: translateX(0px); }
+  50% { transform: translateX(-0.5px) rotate(-0.3deg); }
+  100% { transform: translateX(0.5px) rotate(0.3deg); }
+}
+
+

@@ -2,62 +2,46 @@ import { useState } from "react";
 import { generateRoadmap } from "../utils/generateRoadmap";
 
 const CareerRoadmap = () => {
-  const [jobTitle, setJobTitle] = useState("");
-  const [roadmap, setRoadmap] = useState("");
+  const [dreamJob, setDreamJob] = useState('');
+  const [roadmap, setRoadmap] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
-    if (!jobTitle.trim()) {
-      alert("Please enter a job title!");
-      return;
-    }
-
-    setRoadmap("Generating roadmap...");
+    setRoadmap('');
     setLoading(true);
-
-    await generateRoadmap(jobTitle, (streamedText) => {
-      setRoadmap(streamedText); // Update UI in real-time
+    await generateRoadmap(dreamJob, (chunk) => {
+      setRoadmap((prev) => prev + chunk);
     });
-
     setLoading(false);
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-black bg-gradient-to-b from-gray-900 to-black text-white p-6">
-      <div className="relative w-full max-w-3xl p-8 rounded-2xl shadow-lg bg-opacity-10 bg-white/10 backdrop-blur-xl border border-white/20">
-        
-        {/* Sci-Fi Glow Effect */}
-        {/* <div className="absolute inset-0 rounded-2xl border-2 border-cyan-400 opacity-20 animate-pulse"></div> */}
+    <div className="min-h-screen bg-gradient-to-b from-[#050A1F] to-[#0D1A3D] text-white font-mono px-4 py-10">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-4xl text-center font-bold mb-6 neon-text">🚀 Career Roadmap Generator</h1>
 
-        <h1 className="text-3xl font-extrabold text-center text-cyan-400 mb-6">
-          🚀 Career Roadmap Generator
-        </h1>
-
-        {/* Job Title Input */}
         <input
           type="text"
-          placeholder="Enter your dream job (e.g., Software Engineer)"
-          className="w-full p-3 rounded-lg text-white bg-transparent border border-cyan-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400"
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
+          placeholder="Enter your dream job..."
+          value={dreamJob}
+          onChange={(e) => setDreamJob(e.target.value)}
+          className="w-full px-4 py-3 mb-4 rounded-md bg-[#0F172A] text-white border border-cyan-500 focus:ring-2 focus:ring-cyan-400 transition duration-200"
         />
 
-        {/* Generate Button */}
         <button
           onClick={handleGenerate}
-          className={`w-full py-3 mt-4 text-white font-semibold rounded-lg transition-all ${
-            loading
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-cyan-500 hover:bg-cyan-600 shadow-lg shadow-cyan-400/50"
-          }`}
           disabled={loading}
+          className={`w-full py-3 rounded-md font-bold transition-all duration-200 ${
+            loading
+              ? 'bg-gray-600 cursor-not-allowed'
+              : 'bg-cyan-500 hover:bg-cyan-400 shadow-lg shadow-cyan-500/30'
+          }`}
         >
-          {loading ? "Generating..." : "Generate Roadmap"}
+          {loading ? 'Generating...' : 'Generate Roadmap'}
         </button>
 
-        {/* Roadmap Output */}
-        <div className="mt-6 p-4 rounded-lg bg-white/10 border border-cyan-300 text-white whitespace-pre-line min-h-[150px]">
-          {roadmap || "Your career roadmap will appear here..."}
+        <div className="mt-8 p-6 rounded-md bg-[#0F1B34] border border-cyan-600 whitespace-pre-line text-cyan-300 shadow-inner shadow-cyan-900/40">
+          {roadmap || (loading && 'Loading...')}
         </div>
       </div>
     </div>

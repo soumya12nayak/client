@@ -10,6 +10,7 @@ import StatsSection from "../components/StatsSection";
 import FixedWebinarComponent from "../components/FloatingWebinarButton"
 import { useEffect, useState } from 'react'
 import SkillAssessmentSection from "../components/SkillAssessmentSection";
+import CareerRoadmapSection from "../components/CareerRoadmapSection";
 
 
 
@@ -25,6 +26,7 @@ const Home = () => {
       <Hero />
       <JobListing />
       <FixedWebinarComponent isPremium={isPremium} />
+      {/* <ChatPopup /> */}<CareerRoadmapSection />
       <SkillAssessmentSection />
       <HowItWorks />
       <Testimonials />

@@ -1,70 +1,66 @@
-export async function generateRoadmap(jobTitle, onStreamUpdate) {
-  const API_URL = "http://localhost:11434/api/generate"; // Ollama API
-  
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "mistral",
-        prompt: `Create a **career roadmap** for a ${jobTitle}s.  
-Follow this structured format:  
-
-1. Introduction to the Role  
-   - Key Responsibilities: (list key tasks).  
-   - Importance of this job: (brief impact statement).  
-
-2. Essential Skills  
-   - Technical Skills: List of 5 core technical skills.  
-   - Soft Skills: List of 3 crucial soft skills.  
-
-3. Learning Path  
-   - Beginner Level: Courses, books, and basic concepts.  
-   - Intermediate Level: Hands-on projects, real-world applications.  
-
-4. Experience & Projects  
-   - Internships, industry projects, open-source contributions.  
-
-5. Job Search & Career Growth  
-   - Building a portfolio, job application strategies, career progression.
-
-Use **bold headings** and **concise bullet points**. No introduction, just start!  
-`,
-        stream: true, // Enable streaming
-      }),
-    });
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let result = "";
-
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      
-      // Decode the chunk and split into lines
-      const chunk = decoder.decode(value, { stream: true }).trim();
-      const lines = chunk.split("\n");
-
-      // Process each line separately
-      for (const line of lines) {
-        try {
-          const jsonData = JSON.parse(line); // Parse JSON
-          if (jsonData.response) {
-            result += jsonData.response; // Append text content
-            onStreamUpdate(result); // Update UI in real-time
-          }
-        } catch (e) {
-          console.error("Error parsing JSON chunk:", line);
+export const generateRoadmap = async (dreamJob, onStreamUpdate) => {
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'deepseek/deepseek-chat:free',
+      stream: true,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a career coach AI. Generate a step-by-step roadmap for a dream job.',
+        },
+        {
+          role: 'user',
+          content: `Give me a short and clean step-by-step career roadmap to become a ${dreamJob}. 
+        Keep it concise, structured in 5-6 bullet points. Avoid long explanations. Focus on practical, realistic steps.`
         }
+      ],
+    }),
+  });
+
+  if (!response.ok || !response.body) {
+    throw new Error('Failed to connect to OpenRouter.');
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let partial = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value, { stream: true });
+    partial += chunk;
+
+    const lines = partial.split('\n');
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed === '' || !trimmed.startsWith('data:')) continue;
+
+      const jsonStr = trimmed.replace('data: ', '');
+      if (jsonStr === '[DONE]') {
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(jsonStr);
+        const content = parsed.choices?.[0]?.delta?.content;
+        if (content) {
+          // 👇 Clean bold markdown
+          onStreamUpdate(content.replace(/\*\*/g, ''));
+        }
+      } catch (err) {
+        console.error('Failed to parse JSON chunk:', jsonStr);
       }
     }
 
-    return result.trim();
-  } catch (error) {
-    console.error("Error fetching roadmap:", error);
-    return "Error generating roadmap. Make sure Ollama is running.";
+    // Keep the last line in case it was incomplete
+    partial = lines[lines.length - 1];
   }
-}
+};

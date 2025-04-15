@@ -12,7 +12,7 @@ const InterviewHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/interviews/${user.id}`);
+        const res = await fetch(`${API_BASE_URL}/api/interviews/${user.id}`);
         if (!res.ok) throw new Error("Failed to fetch interviews");
         const data = await res.json();
         setInterviews(data);
@@ -29,6 +29,8 @@ const InterviewHome = () => {
       state: { role, experience },
     });
   };
+
+  
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] p-6 text-white">

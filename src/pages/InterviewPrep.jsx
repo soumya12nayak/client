@@ -27,6 +27,8 @@ const InterviewPrep = () => {
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [recognition, setRecognition] = useState(null);
 
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || '/api';
+
   useEffect(() => {
     // Change the background color of the body when this component is mounted
     document.body.style.background = 'radial-gradient(circle, rgba(0, 51, 102, 0.9), rgba(0, 0, 0, 0.7))';
@@ -80,7 +82,7 @@ const InterviewPrep = () => {
       setStatus("loading");
       setProgress(0);
       try {
-        const response = await fetch("/api/interviews/stream", {
+        const response = await fetch(`${API_BASE_URL}/api/interviews/stream`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ role, experience }),
@@ -171,7 +173,7 @@ const InterviewPrep = () => {
 
     setError("");
     try {
-      const response = await fetch("/api/interviews/feedback", {
+      const response = await fetch(`${API_BASE_URL}/api/interviews/feedback`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -238,7 +240,7 @@ const InterviewPrep = () => {
     };
 
     try {
-      const response = await fetch("/api/interviews", {
+      const response = await fetch(`${API_BASE_URL}/api/interviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(interviewData),

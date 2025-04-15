@@ -15,12 +15,12 @@ const AIResumeOutput = () => {
     const element = resumeRef.current;
 
     const opt = {
-      margin:       0.5,
-      filename:     `${resume?.personal_info?.name || "resume"}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:    { mode: ['avoid-all'] }
+      margin: 0.5,
+      filename: `${resume?.personal_info?.name || "resume"}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all'] }
     };
 
     html2pdf().set(opt).from(element).save();
@@ -169,13 +169,13 @@ Return only the JSON. Use the summary below as the base input for generation.
           experience: Array.isArray(resumeObj.experience) ? resumeObj.experience : [],
           education: resumeObj.education?.degree
             ? [
-                {
-                  degree: resumeObj.education.degree || "",
-                  major: resumeObj.education.field || "",
-                  institution: resumeObj.education.institution || "",
-                  graduation_year: resumeObj.education.graduationYear || "",
-                },
-              ]
+              {
+                degree: resumeObj.education.degree || "",
+                major: resumeObj.education.field || "",
+                institution: resumeObj.education.institution || "",
+                graduation_year: resumeObj.education.graduationYear || "",
+              },
+            ]
             : [],
           certificates: Array.isArray(resumeObj.certificates) ? resumeObj.certificates : [],
           languages: Array.isArray(resumeObj.languages) ? resumeObj.languages : [],
@@ -195,50 +195,81 @@ Return only the JSON. Use the summary below as the base input for generation.
 
   return (
     <div>
-    <Navbar />
+      <Navbar />
+      <div
+        className="min-h-screen text-white flex flex-col justify-center items-center p-6 bg-cover bg-center relative"
+        style={{
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1531707566548-6577aab321d7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Dark overlay for readability and sci-fi glow */}
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0"></div>
+
+        <div className="relative z-10 w-full max-w-5xl">
+          <h1 className="text-4xl font-bold text-center mb-10 text-cyan-400 tracking-wide shadow-lg drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]">
+            🛸 Your AI-Generated Resume
+          </h1>
+
+          {resume ? (
+            <>
+              <div className="bg-[#0f172a]/80 p-8 rounded-xl shadow-xl border border-cyan-400/30 backdrop-blur-xl">
+                <ResumeTemplate resume={resume} ref={resumeRef} />
+              </div>
+
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={handleDownloadPDF}
+                  className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition-all duration-300 hover:shadow-cyan-500/70"
+                >
+                  🚀 Download PDF
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-screen w-full">
+
+  <div className="text-center">
     <div
-    className="min-h-screen text-white flex flex-col justify-center items-center p-6 bg-cover bg-center relative"
-    style={{
-      backgroundImage:
-        "url('https://images.unsplash.com/photo-1531707566548-6577aab321d7?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    }}
-  >
-    {/* Dark overlay for readability and sci-fi glow */}
-    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0"></div>
-  
-    <div className="relative z-10 w-full max-w-5xl">
-      <h1 className="text-4xl font-bold text-center mb-10 text-cyan-400 tracking-wide shadow-lg drop-shadow-[0_0_15px_rgba(0,255,255,0.5)]">
-        🛸 Your AI-Generated Resume
-      </h1>
-  
-      {resume ? (
-        <>
-          <div className="bg-[#0f172a]/80 p-8 rounded-xl shadow-xl border border-cyan-400/30 backdrop-blur-xl">
-            <ResumeTemplate resume={resume} ref={resumeRef} />
+      aria-label="Orange and tan hamster running in a metal wheel"
+      role="img"
+      className="wheel-and-hamster mx-auto mb-6"
+    >
+      <div className="wheel" />
+      <div className="hamster">
+        <div className="hamster__body">
+          <div className="hamster__head">
+            <div className="hamster__ear" />
+            <div className="hamster__eye" />
+            <div className="hamster__nose" />
           </div>
-  
-          <div className="flex justify-center mt-8">
-            <button
-              onClick={handleDownloadPDF}
-              className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition-all duration-300 hover:shadow-cyan-500/70"
-            >
-              🚀 Download PDF
-            </button>
-          </div>
-        </>
-      ) : (
-        <p className="text-center text-cyan-300 text-lg mt-20 animate-pulse">
-          ⏳ Generating your resume...
-        </p>
-      )}
+          <div className="hamster__limb hamster__limb--fr" />
+          <div className="hamster__limb hamster__limb--fl" />
+          <div className="hamster__limb hamster__limb--br" />
+          <div className="hamster__limb hamster__limb--bl" />
+          <div className="hamster__tail" />
+        </div>
+      </div>
+      <div className="spoke" />
+    </div>
+
+    <div className="textWrapper">
+      <p className="text text-lg font-semibold">Generating Your Resume...</p>
+      <div className="invertbox mx-auto mt-2" />
     </div>
   </div>
-  </div>
-  )  
   
+</div>
+
+          )}
+        </div>
+      </div>
+    </div>
+  )
+
 };
 
 export default AIResumeOutput;

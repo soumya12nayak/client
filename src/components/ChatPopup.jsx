@@ -25,34 +25,32 @@ const ChatPopup = () => {
   }, []);
 
 
-
   const handleSend = async () => {
     if (!input.trim()) return;
-
+  
     const newMessage = { sender: "user", text: input };
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
     setInput("");
-    setIsTyping(true); // Start typing animation
-    sendAudioRef.current?.play();// 🔊 play on user send
-
-
-
-
-
+    setIsTyping(true);
+    sendAudioRef.current?.play();
+  
     const systemPrompt = {
       role: "system",
       content: `You are CareerGenie AI, a smart career assistant for a job portal named CareerGenie. 
     CareerGenie helps users with job searching, resume building, AI-generated resumes, skill assessments with certifications, career roadmap generation, and video resume submissions. 
     You can answer questions about career paths, resume tips, how to apply to jobs, and how CareerGenie can help users in their job journey.
-    Career Genie also have a premium membership plan for 499 rupees and buying it will give the users various perks, the perks are ai generated resume,exclusive job listing,recruiter contact details,exclusive career webinars etc. give all these info in about 3 to 4 lines.`,
+    Career Genie also have a premium membership plan for 499 rupees and buying it will give the users various perks, the perks are ai generated resume,exclusive job listing,recruiter contact details,exclusive career webinars etc. give all these info in about 3 to 4 lines.`, // truncated for brevity
     };
-
-    const updatedMessagesWithSystem = [systemPrompt, ...updatedMessages.map((msg) => ({
-      role: msg.sender === "user" ? "user" : "assistant",
-      content: msg.text,
-    }))];
-
+  
+    const updatedMessagesWithSystem = [
+      systemPrompt,
+      ...updatedMessages.map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.text,
+      })),
+    ];
+  
     try {
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -65,19 +63,47 @@ const ChatPopup = () => {
           messages: updatedMessagesWithSystem,
         }),
       });
-
+  
       const data = await response.json();
       const botReply = data.choices[0].message.content;
-      setMessages([...updatedMessages, { sender: "bot", text: botReply }]);
+      const finalMessages = [...updatedMessages, { sender: "bot", text: botReply }];
+      setMessages(finalMessages);
       receiveAudioRef.current?.play();
-
-
+  
+      // ✅ Save to MongoDB
+      await fetch("https://career-genie-server.vercel.app/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: [...updatedMessages, { sender: "bot", text: botReply }] }),
+      });
+      
+  
     } catch (error) {
       console.error("Chat error:", error);
     } finally {
-      setIsTyping(false); // Stop typing animation
+      setIsTyping(false);
     }
   };
+  
+  // useEffect(() => {
+  //   const fetchChats = async () => {
+  //     try {
+  //       const res = await fetch("https://career-genie-server.vercel.app/api/chat");
+  //       const data = await res.json();
+  //       if (data.length > 0) {
+  //         setMessages(data[data.length - 1].messages); // Load latest chat
+  //       }
+  //     } catch (err) {
+  //       console.error("Failed to load chat history", err);
+  //     }
+  //   };
+  
+  //   fetchChats();
+  // }, []);
+  
+  
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });

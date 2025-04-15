@@ -11,6 +11,7 @@ import FixedWebinarComponent from "../components/FloatingWebinarButton"
 import { useEffect, useState } from 'react'
 import SkillAssessmentSection from "../components/SkillAssessmentSection";
 import CareerRoadmapSection from "../components/CareerRoadmapSection";
+import RedirectToInterview from "../components/RedirectToInterview";
 
 
 
@@ -25,6 +26,7 @@ const Home = () => {
       <Navbar />
       <Hero />
       <JobListing />
+      <RedirectToInterview />
       <FixedWebinarComponent isPremium={isPremium} />
       {/* <ChatPopup /> */}<CareerRoadmapSection />
       <SkillAssessmentSection />

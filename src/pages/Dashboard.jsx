@@ -24,10 +24,10 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* ✅ Navbar with Glass Effect */}
-      <div className="fixed w-full bg-white/60 backdrop-blur-lg shadow-sm py-3 px-6 z-10 flex justify-between items-center">
+      <div className="fixed w-full bg-white/60 backdrop-blur-lg shadow-sm py-5 px-6 z-10 flex justify-between items-center">
         <img
           onClick={() => navigate("/")}
-          className="w-28 cursor-pointer"
+          className="w-30 h-10 cursor-pointer"
           src={assets.logo}
           alt="Logo"
         />
@@ -50,7 +50,8 @@ const Dashboard = () => {
       <div
         className={`transition-all duration-300 min-h-screen ${
           isSidebarOpen ? "w-60" : "w-16"
-        } bg-gradient-to-r from-gray-800 to-gray-900 shadow-lg text-white flex flex-col`}
+        } bg-gradient-to-r from-blue-200 via-indigo-200 to-purple-200 shadow-lg text-gray-900 flex flex-col
+`}
         onMouseEnter={() => setIsSidebarOpen(true)}
         onMouseLeave={() => setIsSidebarOpen(false)}
       >
@@ -64,7 +65,8 @@ const Dashboard = () => {
               key={index}
               to={`/dashboard/${item.path}`}
               className={({ isActive }) =>
-                `flex items-center gap-4 p-4 hover:bg-gray-700 rounded-r-full transition-all duration-200 ${
+                `flex items-center gap-4 p-4 hover:bg-indigo-700 rounded-r-full transition-all duration-200
+ ${
                   isActive ? "bg-blue-500/80 font-semibold" : ""
                 }`
               }

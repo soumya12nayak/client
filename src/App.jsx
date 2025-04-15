@@ -23,6 +23,8 @@ import ResumeChoice from './pages/ResumeChoice';
 import AISummaryInput from './pages/AISummaryInput';
 import AIResumeOutput from './pages/AIResumeOutput';
 import ChatPopup from "./components/ChatPopup";
+import InterviewPrep from './pages/InterviewPrep';
+import InterviewHome from './pages/InterviewHome'
 
 // import QuickLinkPage from './pages/QuickLinkPage';
 
@@ -46,6 +48,8 @@ const App = () => {
         <Route path="/resume" element={<ResumeChoice />} />
         <Route path="/ai-summary" element={<AISummaryInput />} />
         <Route path="/ai-generated-resume" element={<AIResumeOutput />} />
+        <Route path="/interview" element={<InterviewPrep />} />
+<Route path="/interview-home" element={<InterviewHome />} />
         {/* <Route path="/:linkType" element={<QuickLinkPage />} /> */}
         <Route path='/apply-job/:id' element={<ApplyJob />} />
         <Route path='/applications' element={<Applications />} />

@@ -6,8 +6,11 @@ const InterviewHome = () => {
   const [role, setRole] = useState("");
   const [experience, setExperience] = useState("");
   const [interviews, setInterviews] = useState([]);
+  const [selectedInterview, setSelectedInterview] = useState(null);
   const { user } = useUser();
   const navigate = useNavigate();
+
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "/api";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +33,18 @@ const InterviewHome = () => {
     });
   };
 
-  
+  const fetchFullInterview = async (interviewId) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/interviews/interview/${interviewId}`);
+      if (!res.ok) throw new Error("Failed to fetch full interview");
+      const data = await res.json();
+      setSelectedInterview(data); // this will update the modal content
+      setShowModal(true);         // show the modal
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] p-6 text-white">
@@ -76,14 +90,48 @@ const InterviewHome = () => {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button className="text-cyan-500 hover:text-cyan-600 font-medium">
+                <button
+                  className="text-cyan-500 hover:text-cyan-600 font-medium"
+                  onClick={() => fetchFullInterview(int._id)}
+                >
                   View Details
                 </button>
+
               </div>
             </li>
           ))}
         </ul>
       </div>
+
+      {/* Interview Modal */}
+      {selectedInterview && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4">
+          <div className="bg-[#1f1f2e] text-white rounded-lg shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6 relative">
+            <button
+              onClick={() => setSelectedInterview(null)}
+              className="absolute top-3 right-4 text-2xl text-gray-400 hover:text-white"
+            >
+              &times;
+            </button>
+
+            <h2 className="text-2xl font-bold mb-4">Interview Details</h2>
+            <p><strong>Role:</strong> {selectedInterview.role}</p>
+            <p><strong>Experience:</strong> {selectedInterview.experience}</p>
+            <p><strong>Date:</strong> {new Date(selectedInterview.createdAt).toLocaleString()}</p>
+            <p><strong>Score:</strong> {selectedInterview.score}/100</p>
+
+            <div className="mt-6 space-y-4">
+              {selectedInterview.questions?.map((q, idx) => (
+                <div key={idx} className="bg-[#2b2b3c] p-4 rounded-lg">
+                  <p className="font-medium text-cyan-300">Q{idx + 1}: {q.question}</p>
+                  <p className="text-sm mt-2"><span className="text-gray-400">Your Answer:</span> {q.answer}</p>
+                  <p className="text-sm"><span className="text-gray-400">AI Feedback:</span> {q.feedback}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -394,60 +394,110 @@ const InterviewPrep = () => {
           </div>
         </div>
   
-        {/* Right Column - Webcam & Voice Controls (1/3 width on larger screens, full width on mobile) */}
-        <div className="w-full md:w-1/3 font-mono text-white p-2">
-          <div className="flex flex-col items-center gap-3">
-            {showWebcam && (
-              <div className="w-full mb-2">
-                <Webcam
-                  audio={false}
-                  ref={setWebcamRef}
-                  screenshotFormat="image/jpeg"
-                  className="rounded-lg border-2 border-cyan-400/40 shadow-md w-full h-auto"
-                  videoConstraints={{ width: 320, height: 240, facingMode: "user" }} 
-                />
-              </div>
-            )}
-  
-            <div className="flex flex-col items-center gap-2 text-sm w-full">
-              <label className="flex items-center gap-2 cursor-pointer text-cyan-200">
-                <input
-                  type="checkbox"
-                  checked={showWebcam}
-                  onChange={() => setShowWebcam((prev) => !prev)}
-                  className="accent-cyan-500 scale-110" 
-                />
-                <span className="text-sm">Webcam</span>
-              </label>
-  
-              <label className="flex items-center gap-2 cursor-pointer text-green-300">
-                <input
-                  type="checkbox"
-                  checked={voiceEnabled}
-                  onChange={() => {
-                    setVoiceEnabled((prev) => !prev);
-                    setIsListening(false);
-                  }}
-                  className="accent-green-500 scale-110" 
-                />
-                <span className="text-sm">Voice Input</span>
-              </label>
-  
-              {voiceEnabled && (
-                <button
-                  onClick={toggleRecording}
-                  className={`px-4 py-1.5 rounded-full text-black font-bold text-sm tracking-wider transition w-full max-w-xs mt-1
-                    ${isListening
-                      ? "bg-red-400 hover:bg-red-500 shadow-red-500 shadow-sm"
-                      : "bg-green-400 hover:bg-green-500 shadow-green-500 shadow-sm"
-                    }`}
-                >
-                  {isListening ? "🎙 Stop Mic" : "🎤 Start Mic"}
-                </button>
-              )}
-            </div>
-          </div>
+        {/* Right Column - Webcam & Voice Controls */}
+<div className="w-full md:w-1/3 font-mono text-white p-3 bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] rounded-3xl shadow-2xl  transition-all duration-500">
+  <div className="flex flex-col items-center gap-8">
+    
+    {/* Webcam Section - Color Section 1 */}
+    <div className="w-full mb-3 bg-[#2b2b3c] p-6 rounded-xl shadow-lg">
+      <h3 className="text-3xl font-extrabold text-cyan-400 flex items-center gap-3">
+        <i className="fas fa-video text-cyan-300 text-2xl"></i> <span>Webcam Preview</span>
+      </h3>
+      {showWebcam && (
+        <div className="w-full mb-4">
+          <Webcam
+            audio={false}
+            ref={setWebcamRef}
+            screenshotFormat="image/jpeg"
+            className="rounded-3xl border-4 border-cyan-400 shadow-2xl w-full h-auto"
+            videoConstraints={{ width: 320, height: 240, facingMode: "user" }}
+          />
         </div>
+      )}
+      <p className="text-sm text-gray-300 text-center italic">
+        🌟 Preview your webcam before starting the interview. Make sure you look your best!
+      </p>
+      <div className="flex flex-col items-center gap-5 text-sm w-full">
+        <label className="flex items-center gap-3 cursor-pointer text-cyan-200 transition-all duration-300 hover:text-cyan-400">
+          <input
+            type="checkbox"
+            checked={showWebcam}
+            onChange={() => setShowWebcam((prev) => !prev)}
+            className="accent-cyan-500 scale-110"
+          />
+          <span className="text-lg font-semibold">📷 Turn On Webcam</span>
+          <i className="fas fa-video text-cyan-300 text-xl"></i>
+        </label>
+
+        <div className="text-center text-gray-400 text-xs mt-2">
+          🏆 Enabling webcam allows you to preview your video before your interview begins. Get ready!
+        </div>
+      </div>
+    </div>
+
+    {/* Webcam Toggle Section - Color Section 2
+    <div className="w-full mb-6 bg-[#3b3f5c] p-6 rounded-xl shadow-lg">
+      
+    </div> */}
+
+    {/* Voice Input Section - Color Section 3 */}
+    <div className="w-full mb-3 bg-[#2f3d53] p-6 rounded-xl shadow-lg">
+      <div className="flex flex-col items-center gap-5 text-sm w-full">
+        <label className="flex items-center gap-3 cursor-pointer text-green-300 transition-all duration-300 hover:text-green-400">
+          <input
+            type="checkbox"
+            checked={voiceEnabled}
+            onChange={() => {
+              setVoiceEnabled((prev) => !prev);
+              setIsListening(false);
+            }}
+            className="accent-green-500 scale-110"
+          />
+          <span className="text-lg font-semibold">🎤 Enable Voice Input</span>
+          <i className="fas fa-microphone-alt text-green-300 text-xl"></i>
+        </label>
+
+        <div className="text-center text-gray-400 text-xs mt-2">
+          🗣 Voice input makes your mock interview more interactive. Speak your answers and get real-time feedback!
+        </div>
+
+        {/* Voice Recording Button */}
+        {voiceEnabled && (
+          <button
+            onClick={toggleRecording}
+            className={`px-6 py-3 rounded-full text-white font-bold text-lg tracking-wider transition-all duration-300 w-full max-w-xs mt-4 
+              ${isListening
+                ? "bg-red-500 hover:bg-red-600 shadow-xl shadow-red-500/50"
+                : "bg-green-500 hover:bg-green-600 shadow-xl shadow-green-500/50"
+              }`}
+          >
+            <i className={`mr-2 ${isListening ? "fas fa-stop-circle" : "fas fa-microphone"}`}></i>
+            {isListening ? "🎙 Stop Mic" : "🎤 Start Mic"}
+          </button>
+        )}
+      </div>
+    </div>
+
+    
+
+    {/* Informational Icons - Color Section 5 */}
+    <div className="w-full mb-3 bg-[#354355] p-6 rounded-xl shadow-lg">
+      <div className="mt-6 text-center text-xs text-gray-400">
+        <p><i className="fas fa-lightbulb text-yellow-300"></i> 💡 Tips: Speak clearly and confidently. AI will assess tone and content!</p>
+        <p><i className="fas fa-cogs text-orange-400"></i> ⚙️ Settings: Adjust your microphone and webcam settings for optimal performance.</p>
+      </div>
+    </div>
+
+    {/* Custom Reminder Icon - Color Section 6 */}
+    <div className="w-full bg-[#2c3b50] p-6 rounded-xl shadow-lg">
+      <div className="flex flex-col items-center gap-3 mt-6">
+        <i className="fas fa-exclamation-triangle text-red-500 text-3xl"></i>
+        <p className="text-sm text-gray-300 font-bold">⚠️ Remember to stay calm and answer confidently!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
       </div>
     </div>
   );

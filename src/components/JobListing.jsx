@@ -2,10 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { assets, JobCategories, JobLocations } from "../assets/assets";
 import JobCard from "./JobCard";
-
+import { useUser } from "@clerk/clerk-react";
+ // Import useUser from Clerk
 
 const JobListing = () => {
   const { isSearched, searchFilter, setSearchFilter, jobs } = useContext(AppContext);
+  const { isSignedIn } = useUser(); // Check if the user is signed in
 
   const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,9 +18,6 @@ const JobListing = () => {
   const [filteredJobs, setFilteredJobs] = useState(jobs);
 
   const lockedJobIds = [2, 5, 8]; // Example: Lock jobs with these IDs
-
-
-  
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -36,7 +35,6 @@ const JobListing = () => {
   const handleMaxSalaryChange = (e) => setMaxSalary(Number(e.target.value));
 
   useEffect(() => {
-    
     const matchesCategory = (job) =>
       selectedCategories.length === 0 || selectedCategories.includes(job.category);
 
@@ -45,10 +43,9 @@ const JobListing = () => {
 
     const matchesTitle = (job) =>
       !isSearched || searchFilter.title === "" || job.title.toLowerCase().includes(searchFilter.title.toLowerCase());
-    
+
     const matchesSearchLocation = (job) =>
       !isSearched || searchFilter.location === "" || job.location.toLowerCase().includes(searchFilter.location.toLowerCase());
-    
 
     const matchesSalary = (job) => job.salary >= minSalary && job.salary <= maxSalary;
 
@@ -128,12 +125,15 @@ const JobListing = () => {
             <div className="space-y-2">
               {JobCategories.map((category, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="cursor-pointer"
-                    onChange={() => handleCategoryChange(category)}
-                    checked={selectedCategories.includes(category)}
-                  />
+                  <label class="toggle-container">
+                    <input
+                      type="checkbox"
+                      className="cursor-pointer"
+                      onChange={() => handleCategoryChange(category)}
+                      checked={selectedCategories.includes(category)}
+                    />
+                    <div class="toggle-checkmark"></div>
+                  </label>
                   <span className="text-gray-300">{category}</span>
                 </div>
               ))}
@@ -144,12 +144,15 @@ const JobListing = () => {
             <div className="space-y-2">
               {JobLocations.map((location, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="cursor-pointer"
-                    onChange={() => handleLocationChange(location)}
-                    checked={selectedLocations.includes(location)}
-                  />
+                  <label class="toggle-container">
+                    <input
+                      type="checkbox"
+                      className="cursor-pointer"
+                      onChange={() => handleLocationChange(location)}
+                      checked={selectedLocations.includes(location)}
+                    />
+                    <div class="toggle-checkmark"></div>
+                  </label>
                   <span className="text-gray-300">{location}</span>
                 </div>
               ))}
@@ -181,27 +184,72 @@ const JobListing = () => {
             <h3 className="font-semibold text-3xl text-[#64FFDA] mb-4">Available Jobs</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredJobs.slice((currentPage - 1) * 6, currentPage * 6).map((job, index) => (
-                <JobCard key={index} job={job} isLocked={lockedJobIds.includes(index)}/>
+                
+              <JobCard key={index} job={job} isLocked={lockedJobIds.includes(index)}/>
               ))}
             </div>
           </div>
         </div>
 
-
         {/* Pagination */}
         {filteredJobs.length > 0 && (
-          <div className='flex items-center justify-center space-x-2 mt-10'>
+          <div className="flex items-center justify-center space-x-2 mt-10">
             <a href="#job-list">
-              <img onClick={() => setCurrentPage(Math.max(currentPage - 1), 1)} src={assets.left_arrow_icon} alt="" />
+              <button
+                onClick={() =>
+                  setCurrentPage(Math.max(currentPage - 1, 1))
+                }
+                className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white flex items-center justify-center hover:bg-gradient-to-l hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 active:scale-95 transition-all duration-300 transform hover:shadow-lg shadow-xl"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
             </a>
+
             {Array.from({ length: Math.ceil(filteredJobs.length / 6) }).map((_, index) => (
               <a key={index} href="#job-list">
-                <button onClick={() => setCurrentPage(index + 1)} className={`w-10 h-10 flex items-center justify-center border border-gray-300 rounded ${currentPage === index + 1 ? 'bg-blue-900 text-black-500' : 'text-gray-100'}`}>{index + 1}</button>
+                <button
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`w-10 h-10 flex items-center justify-center border border-gray-300 rounded 
+    ${currentPage === index + 1 ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white" : "text-gray-100"}
+    hover:bg-gradient-to-r hover:from-indigo-500 hover:to-blue-600 hover:text-white 
+    transition-all duration-300`}
+                >
+                  {index + 1}
+                </button>
+
               </a>
             ))}
             <a href="#job-list">
-              <img onClick={() => setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredJobs.length / 6)))} src={assets.right_arrow_icon} alt="" />
+              <button
+                onClick={() =>
+                  setCurrentPage(Math.min(currentPage + 1, Math.ceil(filteredJobs.length / 6)))
+                }
+                className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white flex items-center justify-center hover:bg-gradient-to-l hover:from-pink-500 hover:via-purple-500 hover:to-blue-500 active:scale-95 transition-all duration-300 transform hover:shadow-lg shadow-xl"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </a>
+
+
+
           </div>
         )}
       </section>

@@ -11,8 +11,8 @@ const ChatPopup = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const bottomRef = useRef(null);
-//   const sendAudio = new Audio('/sounds/send.mp3');     // or sendSound if imported
-// const receiveAudio = new Audio('/sounds/receive.mp3');
+  //   const sendAudio = new Audio('/sounds/send.mp3');     // or sendSound if imported
+  // const receiveAudio = new Audio('/sounds/receive.mp3');
 
 
   // ✅ Create Audio objects ONCE
@@ -27,14 +27,14 @@ const ChatPopup = () => {
 
   const handleSend = async () => {
     if (!input.trim()) return;
-  
+
     const newMessage = { sender: "user", text: input };
     const updatedMessages = [...messages, newMessage];
     setMessages(updatedMessages);
     setInput("");
     setIsTyping(true);
     sendAudioRef.current?.play();
-  
+
     const systemPrompt = {
       role: "system",
       content: `You are CareerGenie AI, a smart career assistant for a job portal named CareerGenie. 
@@ -42,7 +42,7 @@ const ChatPopup = () => {
     You can answer questions about career paths, resume tips, how to apply to jobs, and how CareerGenie can help users in their job journey.
     Career Genie also have a premium membership plan for 499 rupees and buying it will give the users various perks, the perks are ai generated resume,exclusive job listing,recruiter contact details,exclusive career webinars etc. give all these info in about 3 to 4 lines.`, // truncated for brevity
     };
-  
+
     const updatedMessagesWithSystem = [
       systemPrompt,
       ...updatedMessages.map((msg) => ({
@@ -50,7 +50,7 @@ const ChatPopup = () => {
         content: msg.text,
       })),
     ];
-  
+
     try {
       const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -63,13 +63,13 @@ const ChatPopup = () => {
           messages: updatedMessagesWithSystem,
         }),
       });
-  
+
       const data = await response.json();
       const botReply = data.choices[0].message.content;
       const finalMessages = [...updatedMessages, { sender: "bot", text: botReply }];
       setMessages(finalMessages);
       receiveAudioRef.current?.play();
-  
+
       // ✅ Save to MongoDB
       await fetch("https://career-genie-server.vercel.app/api/chat", {
         method: "POST",
@@ -78,15 +78,15 @@ const ChatPopup = () => {
         },
         body: JSON.stringify({ messages: [...updatedMessages, { sender: "bot", text: botReply }] }),
       });
-      
-  
+
+
     } catch (error) {
       console.error("Chat error:", error);
     } finally {
       setIsTyping(false);
     }
   };
-  
+
   // useEffect(() => {
   //   const fetchChats = async () => {
   //     try {
@@ -99,11 +99,11 @@ const ChatPopup = () => {
   //       console.error("Failed to load chat history", err);
   //     }
   //   };
-  
+
   //   fetchChats();
   // }, []);
-  
-  
+
+
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
@@ -143,43 +143,48 @@ const ChatPopup = () => {
                   >
                     <div
                       className={`px-4 py-2 rounded-lg max-w-[80%] ${msg.sender === "user"
-                          ? "bg-cyan-500 text-white"
-                          : "bg-gray-200 text-gray-800"
+                        ? "bg-cyan-500 text-white"
+                        : "bg-gray-200 text-gray-800"
                         }`}
                     >
                       {msg.text}
                     </div>
                   </div>
+                  
                 ))}
-                {/* Typing animation */}
+                {/* Sci-Fi Typing Animation (White Only) */}
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg max-w-[80%]">
-                      <div className="flex space-x-1">
-                        <span className="animate-bounce">.</span>
-                        <span className="animate-bounce delay-100">.</span>
-                        <span className="animate-bounce delay-200">.</span>
-                      </div>
-                    </div>
+                    <div class="lds-ellipsis"><div></div><div></div><div></div></div>
                   </div>
                 )}
+
                 <div ref={bottomRef} />
 
               </div>
 
               {/* Input */}
-              <div className="p-3 border-t bg-white flex items-center gap-2">
+              <div className="p-3 border-t bg-[radial-gradient(#173d49_85%,_#36a6f1_90%,_#0d1725_20%)] flex items-center gap-2">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                  className="flex-1 px-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                  className="w-full bg-zinc-200 text-zinc-600 font-mono ring-1 ring-zinc-400 focus:ring-2 focus:ring-rose-400 outline-none duration-300 placeholder:text-zinc-600 placeholder:opacity-50 rounded-full px-4 py-2 shadow-md focus:shadow-lg focus:shadow-rose-400 dark:shadow-md dark:shadow-purple-500"
                   placeholder="Ask a question..."
                 />
                 <button
+
                   onClick={handleSend}
-                  className="bg-cyan-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-cyan-600 transition"
+                  className="ruby77 "
                 >
+                  <div class="svg-wrapper-1">
+                    <div class="svg-wrapper">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14">
+                        <path fill="none" d="M0 0h24v24H0z"></path>
+                        <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                      </svg>
+                    </div>
+                  </div>
                   Send
                 </button>
               </div>
@@ -189,7 +194,7 @@ const ChatPopup = () => {
             <div className="flex justify-end mt-2 pr-1">
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg hover:bg-amber-400 transition"
+                className="Bttt"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -213,7 +218,7 @@ const ChatPopup = () => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(true)}
-          className="w-14 h-14 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg hover:bg-amber-300"
+          className="Bttt"
         >
           <BsChatDotsFill size={22} />
         </motion.button>

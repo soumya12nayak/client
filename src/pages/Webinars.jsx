@@ -1,153 +1,171 @@
-import { useState } from "react";
-
+import React from "react";
+import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
+import WebinarCard from "../components/WebinarCard";
+import { getWebinars } from "../api/webinarApi";
+import { Rocket, Calendar, Users, Video, HelpCircle } from "lucide-react";
 
 const Webinars = () => {
-  const webinars = [
-    {
-      title: "🚀 Career Growth in Tech",
-      date: "April 5, 2025",
-      speaker: "John Doe (CTO, TechCorp)",
-      description: "Learn how to scale your career in the tech industry, from entry-level to senior roles.",
-    },
-    {
-      title: "💡 Resume & Interview Masterclass",
-      date: "April 10, 2025",
-      speaker: "Sarah Smith (HR Lead, Google)",
-      description: "Master the art of resume writing and interview techniques to land your dream job.",
-    },
-    {
-      title: "🌎 Remote Work Success Strategies",
-      date: "April 15, 2025",
-      speaker: "Mike Johnson (CEO, RemoteWorks)",
-      description: "Discover tips and tools to thrive in a remote work environment and increase productivity.",
-    },
-    {
-      title: "📊 Salary Negotiation Secrets",
-      date: "April 20, 2025",
-      speaker: "Emma Wilson (Career Coach)",
-      description: "Learn how to negotiate your salary and benefits like a pro.",
-    },
-    {
-      title: "🛠️ Building a Strong LinkedIn Profile",
-      date: "April 25, 2025",
-      speaker: "David Lee (LinkedIn Expert)",
-      description: "Optimize your LinkedIn profile to attract recruiters and grow your network.",
-    },
-  ];
+  const { user, isSignedIn } = useUser();
+  const [webinars, setWebinars] = React.useState([]);
+  const navigate = useNavigate();
 
-  const [selectedWebinar, setSelectedWebinar] = useState(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [registered, setRegistered] = useState(
-    JSON.parse(localStorage.getItem("registeredWebinars")) || []
-  );
-
-  const handleRegister = (webinarTitle) => {
-    setSelectedWebinar(webinarTitle);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!name || !email) {
-      alert("Please enter your name and email.");
-      return;
-    }
-
-    const newRegistration = { name, email, webinar: selectedWebinar };
-    const updatedRegistrations = [...registered, newRegistration];
-    setRegistered(updatedRegistrations);
-    localStorage.setItem("registeredWebinars", JSON.stringify(updatedRegistrations));
-
-    alert(`🎉 You are registered for "${selectedWebinar}"!`);
-    setSelectedWebinar(null);
-    setName("");
-    setEmail("");
-  };
+  React.useEffect(() => {
+    getWebinars()
+      .then((data) => setWebinars(data))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white px-6 py-12">
-      {/* Page Title */}
-      <h1 className="text-5xl font-bold text-center text-cyan-400 mb-10 drop-shadow-md">
-        🎤 Premium Webinars
-      </h1>
-      <p className="text-gray-300 text-center max-w-2xl mx-auto mb-12">
-        Join exclusive webinars hosted by industry experts. Upgrade your career with expert insights, practical tips, and live Q&A sessions.
-      </p>
-
-      {/* Webinars List */}
-      <div className="max-w-6xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {webinars.map((webinar, index) => (
-          <div key={index} className="bg-gray-800 p-6 rounded-lg shadow-lg border border-cyan-300/50 hover:scale-105 transition-all duration-300">
-            <h2 className="text-xl font-semibold text-cyan-300 mb-2">{webinar.title}</h2>
-            <p className="text-gray-300 mb-1">📅 {webinar.date}</p>
-            <p className="text-gray-400 mb-2">🎤 Speaker: {webinar.speaker}</p>
-            <p className="text-gray-400 mb-4">{webinar.description}</p>
+    <div className="min-h-screen bg-gradient-to-br from-[#0a192f] via-[#0f1b38] to-[#16202E] flex flex-col">
+      {/* Navigation */}
+      <nav className="flex justify-between items-center p-6 border-b border-[#00C9FF]/20">
+        <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#00C9FF] to-[#92FE9D]">
+          CareerGenie WebinarHub
+        </div>
+        {isSignedIn ? (
+          <div className="flex items-center gap-4">
+            <span className="text-[#c4d4f0]">Welcome back, {user.firstName}</span>
             <button
-              onClick={() => handleRegister(webinar.title)}
-              className="mt-2 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition"
+              onClick={() => navigate("/dashboard-web")}
+              className="bg-gradient-to-r from-[#00C9FF] to-[#92FE9D] hover:from-[#00a8e0] hover:to-[#7de38d] text-black font-medium px-6 py-2 rounded-lg transition-all duration-300"
             >
-              Register Now
+              Dashboard
             </button>
           </div>
-        ))}
-      </div>
+        ) : (
+          <button
+            onClick={() => navigate("/sign-in")}
+            className="bg-gradient-to-r from-[#00C9FF] to-[#92FE9D] hover:from-[#00a8e0] hover:to-[#7de38d] text-black font-medium px-6 py-2 rounded-lg transition-all duration-300"
+          >
+            Sign In
+          </button>
+        )}
+      </nav>
 
-      {selectedWebinar && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-2xl font-bold text-cyan-400 mb-4">Register for {selectedWebinar}</h2>
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-              />
-              <input
-                type="email"
-                placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-              />
-              <button
-                type="submit"
-                className="w-full bg-cyan-500 text-white p-2 rounded-lg hover:bg-cyan-600 transition"
-              >
-                Confirm Registration
-              </button>
-            </form>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-8 flex-1">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-white">Upcoming Webinars</h1>
+          {isSignedIn && (
             <button
-              onClick={() => setSelectedWebinar(null)}
-              className="mt-3 text-gray-300 underline"
+              onClick={() => navigate("/dashboard-web")}
+              className="flex items-center gap-2 bg-[#0f1b38] hover:bg-[#00C9FF]/10 border border-[#00C9FF]/30 text-[#00C9FF] px-4 py-2 rounded-lg transition-colors"
             >
-              Cancel
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              My Webinars
             </button>
+          )}
+        </div>
+
+        {webinars.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {webinars.map((webinar) => (
+              <WebinarCard key={webinar._id} webinar={webinar} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-[#0f1b38]/50 border border-[#00C9FF]/20 rounded-xl p-8 text-center">
+            <div className="text-[#00C9FF] mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <h3 className="text-xl font-medium text-white mb-2">No Webinars Scheduled</h3>
+            <p className="text-[#c4d4f0]">Check back later for upcoming events</p>
+          </div>
+        )}
+
+        {/* How It Works Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">How It Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-[#0f1b38]/50 border border-[#00C9FF]/20 rounded-xl p-6 text-center">
+              <div className="flex justify-center mb-4">
+                <Rocket className="w-8 h-8 text-[#00C9FF]" />
+              </div>
+              <h3 className="text-lg font-medium text-white mb-2">Discover Webinars</h3>
+              <p className="text-[#c4d4f0]">Browse our curated selection of career-focused webinars from industry experts</p>
+            </div>
+            
+            <div className="bg-[#0f1b38]/50 border border-[#00C9FF]/20 rounded-xl p-6 text-center">
+              <div className="flex justify-center mb-4">
+                <Calendar className="w-8 h-8 text-[#00C9FF]" />
+              </div>
+              <h3 className="text-lg font-medium text-white mb-2">Register Easily</h3>
+              <p className="text-[#c4d4f0]">Sign up with one click and get instant access to your selected webinars</p>
+            </div>
+            
+            <div className="bg-[#0f1b38]/50 border border-[#00C9FF]/20 rounded-xl p-6 text-center">
+              <div className="flex justify-center mb-4">
+                <Video className="w-8 h-8 text-[#00C9FF]" />
+              </div>
+              <h3 className="text-lg font-medium text-white mb-2">Join & Learn</h3>
+              <p className="text-[#c4d4f0]">Attend live sessions or watch recordings to boost your career growth</p>
+            </div>
           </div>
         </div>
-      )}
 
-      {/* FAQ Section */}
-      <div className="max-w-3xl mx-auto mt-16 p-6 bg-gray-800 rounded-lg shadow-lg border border-cyan-300/50">
-        <h2 className="text-3xl font-semibold text-cyan-300 mb-6">❓ Frequently Asked Questions</h2>
-        <div className="space-y-4">
-          <div className="bg-gray-700 p-4 rounded">
-            <h3 className="text-lg font-medium">📍 How do I register?</h3>
-            <p className="text-gray-300">Click the "Register Now" button below each webinar, and you'll receive a confirmation email.</p>
-          </div>
-          <div className="bg-gray-700 p-4 rounded">
-            <h3 className="text-lg font-medium">💰 Are these webinars free?</h3>
-            <p className="text-gray-300">These webinars are exclusive for premium members. Upgrade to unlock all sessions!</p>
-          </div>
-          <div className="bg-gray-700 p-4 rounded">
-            <h3 className="text-lg font-medium">📺 Can I watch the webinar later?</h3>
-            <p className="text-gray-300">Yes! Premium members get access to webinar recordings for future reference.</p>
+        {/* Testimonials Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">What Participants Say</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-[#0f1b38]/50 border border-[#00C9FF]/20 rounded-xl p-6">
+              <p className="text-[#c4d4f0] italic mb-4">"The webinars helped me land my dream job in tech. The insights from industry leaders were invaluable."</p>
+              <div className="flex items-center">
+                <div className="w-10 h-10 rounded-full bg-[#00C9FF]/20 flex items-center justify-center mr-3">
+                  <Users className="w-5 h-5 text-[#00C9FF]" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Alex Johnson</p>
+                  <p className="text-[#c4d4f0] text-sm">Software Engineer</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-[#0f1b38]/50 border border-[#00C9FF]/20 rounded-xl p-6">
+              <p className="text-[#c4d4f0] italic mb-4">"I've attended three webinars so far and each one has given me practical skills I use daily in my marketing role."</p>
+              <div className="flex items-center">
+                <div className="w-10 h-10 rounded-full bg-[#00C9FF]/20 flex items-center justify-center mr-3">
+                  <Users className="w-5 h-5 text-[#00C9FF]" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">Sarah Miller</p>
+                  <p className="text-[#c4d4f0] text-sm">Marketing Director</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      
+      {/* Footer */}
+      <footer className="bg-[#0a192f] border-t border-[#00C9FF]/20 py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#00C9FF] to-[#92FE9D]">
+                CareerGenie WebinarHub
+              </h3>
+              <p className="text-[#c4d4f0] mt-2">Empowering your career growth through expert knowledge</p>
+            </div>
+            
+            <div className="flex flex-col items-center md:items-end">
+              <div className="flex space-x-4 mb-4">
+                <a href="/about" className="text-[#c4d4f0] hover:text-[#00C9FF] transition-colors">About</a>
+                <a href="/contact" className="text-[#c4d4f0] hover:text-[#00C9FF] transition-colors">Contact</a>
+                <a href="#" className="text-[#c4d4f0] hover:text-[#00C9FF] transition-colors">FAQ</a>
+                <a href="#" className="text-[#c4d4f0] hover:text-[#00C9FF] transition-colors">Privacy</a>
+              </div>
+              <p className="text-[#c4d4f0] text-sm">© {new Date().getFullYear()} CareerGenie. All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

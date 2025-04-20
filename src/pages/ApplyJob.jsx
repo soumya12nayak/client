@@ -120,7 +120,7 @@ const ApplyJob = () => {
           <div className="flex justify-center md:justify-between flex-wrap gap-8 p-8 mb-6 bg-gradient-to-r from-cyan-700 via-purple-800 to-indigo-900 border border-cyan-300/50 rounded-t-xl">
             <div className="flex flex-col md:flex-row items-center">
               <img
-                className="h-28 bg-black rounded-lg p-4 mr-4 max-md:mb-4 shadow-md border border-cyan-500/50"
+                className="h-28 bg-white rounded-lg p-4 mr-4 max-md:mb-4 shadow-md border border-cyan-500/50"
                 src={JobData.companyId.image}
                 alt="Company Logo"
               />
@@ -149,14 +149,46 @@ const ApplyJob = () => {
 
             {/* Apply Button */}
             <div className="flex flex-col justify-center text-end text-sm max-md:mx-auto max-md:text-center">
+
               <button
-                className={`apply-btn bg-gradient-to-r from-purple-600 to-cyan-500 hover:scale-105 hover:shadow-cyan-400/40 transition-all duration-300 text-white font-bold py-3 px-8 rounded-full shadow-md border border-cyan-300/40 ${isAlreadyApplied ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                onClick={applyHandler}
-                disabled={isAlreadyApplied}
+                onClick={() => {
+                  if (!userData) return toast.error("Login to apply for jobs");
+                  if (isAlreadyApplied) return;
+                  applyHandler();
+                }}
+                disabled={isAlreadyApplied || !userData}
+                className="relative group border-none bg-transparent p-0 outline-none cursor-pointer font-mono font-light uppercase text-base disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isAlreadyApplied ? "✅ Already Applied" : "🚀 Apply Now"}
+                <span className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 rounded-lg transform translate-y-0.5 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:translate-y-1 group-hover:duration-[250ms] group-active:translate-y-px"></span>
+
+                <span className="absolute top-0 left-0 w-full h-full rounded-lg bg-gradient-to-l from-[hsl(217,33%,16%)] via-[hsl(217,33%,32%)] to-[hsl(217,33%,16%)]"></span>
+
+                <div className="relative flex items-center justify-between py-3 px-6 text-lg text-white rounded-lg transform -translate-y-1 bg-gradient-to-r from-[#f27121] via-[#e94057] to-[#8a2387] gap-3 transition duration-[600ms] ease-[cubic-bezier(0.3,0.7,0.4,1)] group-hover:-translate-y-1.5 group-hover:duration-[250ms] group-active:-translate-y-0.5 brightness-100 group-hover:brightness-110">
+                  <span className="select-none">
+                    {isAlreadyApplied
+                      ? "✅ Already Applied"
+                      : !userData
+                        ? "🔒 Login to Apply"
+                        : "🚀 Apply Now"}
+                  </span>
+
+                  {!isAlreadyApplied && (
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-5 h-5 ml-2 -mr-1 transition duration-250 group-hover:translate-x-1"
+                    >
+                      <path
+                        clipRule="evenodd"
+                        fillRule="evenodd"
+                        d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      />
+                    </svg>
+                  )}
+                </div>
               </button>
+
+
               <p className="mt-1 text-gray-400 italic">Posted {moment(JobData.date).fromNow()}</p>
             </div>
           </div>
@@ -169,17 +201,40 @@ const ApplyJob = () => {
 
               {/* Apply Button Below Description */}
               <button
-                className={`apply-btn mt-5 bg-gradient-to-r from-green-500 to-teal-400 hover:scale-105 transition-transform duration-200 ease-in-out text-white font-bold py-3 px-8 rounded-full shadow-md border border-teal-300/50 ${isAlreadyApplied ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                onClick={applyHandler}
-                disabled={isAlreadyApplied}
-              >
-                {isAlreadyApplied ? "✅ Already Applied" : "🚀 Apply Now"}
-              </button>
+  className={`relative inline-flex items-center justify-center gap-4 group mt-5 ${isAlreadyApplied ? "opacity-50 cursor-not-allowed" : ""}`}
+  onClick={applyHandler}
+  disabled={isAlreadyApplied}
+>
+  <div
+    className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
+  ></div>
+  <span
+    className="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+  >
+    {isAlreadyApplied ? "✅ Already Applied" : "🚀 Apply Now"}
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 10 10"
+      height="10"
+      width="10"
+      fill="none"
+      className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+    >
+      <path
+        d="M0 5h7"
+        className="transition opacity-0 group-hover:opacity-100"
+      ></path>
+      <path
+        d="M1 1l4 4-4 4"
+        className="transition group-hover:translate-x-[3px]"
+      ></path>
+    </svg>
+  </span>
+</button>
 
               {/* Why Join Us? Section */}
               <div className="mt-10 p-6 bg-gradient-to-r from-indigo-900 via-purple-800 to-black rounded-lg shadow-lg border border-indigo-500/50">
-                
+
 
                 {/* Recruiter Contact Section (Locked for Non-Premium Users) */}
                 <div className="mt-6 p-6 bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-lg shadow-lg border border-indigo-500/50">
@@ -228,7 +283,7 @@ const ApplyJob = () => {
                   )}
                 </div>
 
-                
+
                 <SalaryInsights salaryData={jobs.filter(job => job.category === JobData.category)} isPremium={userData?.isPremium} />
 
               </div>

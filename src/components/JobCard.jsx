@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 const JobCard = ({ job, isLocked }) => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const JobCard = ({ job, isLocked }) => {
 
   const handleClick = () => {
     if (isLocked && !isPremium) {
-      navigate("/membership");// Show "Buy Premium" popup
+      toast.error("This is a premium job. Please unlock premium access!");
     }
   };
 
@@ -26,7 +27,7 @@ const JobCard = ({ job, isLocked }) => {
           <p className="text-lg font-bold">🔒 Premium Job</p>
           <button onClick={(e) => {
             e.stopPropagation(); // Prevents card click from triggering
-            navigate("/membership"); // ✅ Directly redirect to membership page
+            toast.error("This is a premium job. Please unlock premium access!");
             
           }}className="relative bg-gradient-to-r from-yellow-400 to-yellow-600 text-white 
           font-bold px-6 py-3 rounded-lg shadow-lg overflow-hidden
@@ -81,7 +82,7 @@ const JobCard = ({ job, isLocked }) => {
             navigate(`/apply-job/${job._id}`);
             scrollTo(0, 0);
           }}
-          className="bg-[#00C9FF] text-[#0A141F] px-4 py-2 rounded-lg font-semibold shadow-md hover:bg-[#64FFDA] transition duration-300"
+          className="bg-[#00C9FF] text-[#0A141F] px-3 py-2 rounded-lg font-semibold shadow-md hover:bg-[#64FFDA] transition duration-300"
         >
           Apply Now 🚀
         </button>

@@ -38,38 +38,40 @@ const HowItWorks = () => {
           </p>
         </div>
 
-        {/* Responsive Steps Layout */}
         <div className="flex flex-col sm:flex-row sm:justify-center sm:items-center gap-6 px-5">
           {steps.map((step, index) => (
             <div
               key={index}
-              className="relative flex flex-col items-center p-6 bg-[#1C2B3A] shadow-xl rounded-lg w-full sm:w-64 transition-transform hover:scale-105"
+              className="relative flex flex-col items-center p-6 bg-gradient-to-br from-[#0a0f1c] to-[#141c2b] border border-cyan-500/20 rounded-xl w-full sm:w-64 shadow-[0_4px_20px_rgba(0,255,255,0.1)] transition-all duration-300 hover:scale-105 hover:border-cyan-400 hover:shadow-cyan-500/30 group"
             >
-              {/* Icon */}
-              <div className="text-3xl sm:text-4xl mb-3 bg-gradient-to-br from-[#64FFDA] to-[#00C9FF] p-3 rounded-full shadow-lg animate-pulse">
+              {/* Icon with animation */}
+              <div className="text-3xl sm:text-4xl mb-4 p-4 rounded-full bg-gradient-to-br from-[#00f0ff] to-[#00c9ff] text-black shadow-[0_0_15px_rgba(0,255,255,0.4)]  ">
                 {step.icon}
               </div>
 
-              {/* Step Title & Description */}
-              <h3 className="text-lg sm:text-xl font-semibold text-[#64FFDA] mb-2">
+              {/* Step Title with hover effect */}
+              <h3 className="text-lg sm:text-xl font-bold text-cyan-400 group-hover:text-white mb-2 transition-all duration-300">
                 {step.title}
               </h3>
-              <p className="text-gray-300 text-sm sm:text-base text-center">
+
+              {/* Description with hover effect */}
+              <p className="text-gray-300 text-sm sm:text-base text-center group-hover:text-gray-200 transition-all">
                 {step.description}
               </p>
 
-              {/* Bonus Tip */}
-              <div className="mt-2 text-xs sm:text-sm text-[#00C9FF] italic bg-[#0F172A] p-1 rounded-md shadow-inner">
+              {/* Bonus Tip with Glassmorphism effect */}
+              <div className="mt-3 text-xs sm:text-sm text-[#00f0ff] italic bg-[#0f172a]/80 bg-opacity-50 px-3 py-2 rounded-md shadow-inner backdrop-blur-md">
                 {step.tip}
               </div>
 
               {/* Connector Line for larger screens */}
               {index < steps.length - 1 && (
-                <div className="hidden sm:block absolute top-1/2 right-[-10px] w-10 h-1 bg-gradient-to-r from-[#64FFDA] to-[#00C9FF]" />
+                <div className="hidden sm:block absolute top-1/2 right-[-10px] w-10 h-1 bg-gradient-to-r from-[#64FFDA] to-[#00C9FF] shadow-md" />
               )}
             </div>
           ))}
         </div>
+
       </section>
     </div>
   );

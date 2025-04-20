@@ -32,10 +32,13 @@ const CareerRoadmapSection = () => {
         <div className="mt-8">
           <button
             onClick={() => navigate("/roadmap")}
-            className="bg-cyan-500 px-8 py-3 text-lg font-bold rounded-lg hover:bg-cyan-600 transition-all shadow-md hover:shadow-cyan-400/50"
+            className="mx-auto block w-[210px] h-[51px] rounded-[15px] cursor-pointer transition ease-in-out bg-gradient-to-r from-[#af40ff] via-[#5b42f3] to-[#00ddeb] hover:bg-[#2e8effb3] hover:shadow-md hover:shadow-[#2e8eff80] focus:bg-[#2e8effb3] focus:shadow-md focus:shadow-[#2e8eff80] outline-none"
           >
-            Generate My Roadmap 🚀
+            <div className="w-[210px] h-[47px] rounded-[13px] bg-[#1a1a1a] text-white font-semibold flex items-center justify-center gap-[10px]">
+              <span>Generate My Roadmap 🚀</span>
+            </div>
           </button>
+
         </div>
       </div>
     </div>

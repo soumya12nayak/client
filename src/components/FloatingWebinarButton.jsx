@@ -1,10 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"; // Import toast for notifications
+import { useUser } from "@clerk/clerk-react"; // Import useUser from Clerk
 
 const FixedWebinarComponent = ({ isPremium }) => {
   const navigate = useNavigate();
+  const { isSignedIn } = useUser(); // Using the useUser hook to check if the user is signed in
 
   const handleClick = () => {
-    if (isPremium) {
+    if (!isSignedIn) {
+      // Show a Toastify message to log in if not signed in
+      toast.warning("Please log in to access this feature.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      // Optionally, redirect to the login page
+      
+    } else if (isPremium) {
       navigate("/webinars"); // Direct to Webinars if Premium
     } else {
       navigate("/membership"); // Direct to Membership Page if Not Premium
@@ -26,18 +37,18 @@ const FixedWebinarComponent = ({ isPremium }) => {
           <button
             onClick={handleClick}
             className={`mt-6 px-6 py-3 font-semibold text-lg rounded-full shadow-lg transition-transform ${
-              isPremium
+              isSignedIn
                 ? "bg-gradient-to-r from-purple-600 to-cyan-500 text-white hover:scale-105"
                 : "bg-gray-700 text-gray-400 hover:bg-gray-600"
             }`}
           >
-            {isPremium ? "📅 View Webinars" : "🔒 Unlock Now"}
+            {isSignedIn ? (isPremium ? "📅 View Webinars" : "🔒 Unlock Now") : "🔑 Log In to Access"}
           </button>
 
-          {/* Tooltip for Non-Premium Users */}
-          {!isPremium && (
+          {/* Tooltip for Non-Logged In Users */}
+          {!isSignedIn && (
             <p className="mt-2 text-xs text-gray-400">
-              Click to unlock with Premium Membership.
+              Click to log in and unlock exclusive webinars.
             </p>
           )}
         </div>

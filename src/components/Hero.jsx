@@ -61,12 +61,39 @@ const Hero = () => {
               placeholder="📍 Location"
               className="p-3 w-72 text-sm rounded-lg bg-[#1b2533]/80 border border-[#00f2fe]/40 text-[#c3eaff] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#00f2fe] transition-all shadow-md shadow-[#00f2fe]/10"
             />
+
             <button
-              className="p-3 px-8 bg-[#00f2fe]/90 hover:bg-[#4facfe]/90 text-black font-semibold rounded-lg shadow-lg border border-[#00f2fe] hover:border-[#4facfe] transition-all transform hover:scale-105"
+              class="group relative px-8 py-3.5 rounded-md bg-black text-cyan-400 font-bold tracking-widest uppercase text-sm border border-cyan-500/50 hover:border-cyan-500 transition-all duration-300 ease-in-out hover:text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.25)] hover:shadow-[0_0_35px_rgba(34,211,238,0.45)] active:translate-y-1 active:shadow-[0_0_15px_rgba(34,211,238,0.45)] active:scale-[0.98]"
               onClick={onSearch}
             >
-              🚀 Search
+              <span class="flex items-center gap-3 relative z-10">
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  class="w-5 h-4 ml-2 transition-transform duration-300 group-hover:scale-125"
+                >
+                  <path
+                    d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"
+                  ></path>
+                </svg>
+
+                Search
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="w-4 h-4 transition-all duration-300 group-hover:-rotate-45 group-hover:scale-150"
+                >
+                  <path d="M12 2v20m0-20L4 12m8-10l8 10"></path>
+                </svg>
+              </span>
+              <div
+                class="absolute inset-0 -z-10 bg-gradient-to-r from-cyan-600/25 to-blue-600/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl rounded-md"
+              ></div>
+              <div
+                class="absolute -inset-1 -z-10 bg-gradient-to-r from-cyan-600 to-blue-600 opacity-20 group-hover:opacity-30 blur-xl rounded-md transition-all duration-300 group-hover:blur-2xl"
+              ></div>
             </button>
+
           </div>
 
           {/* Sci-Fi Glowing Divider */}

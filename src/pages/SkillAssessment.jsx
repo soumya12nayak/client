@@ -46,7 +46,7 @@ const Assessment = () => {
             <button
               key={index}
               onClick={() => navigate(`/quiz/${skill.name.toLowerCase()}`)}
-              className="flex items-center justify-center gap-2 bg-gray-700 px-6 py-4 rounded-lg hover:bg-cyan-500 transition-all text-lg font-semibold shadow-lg"
+              className="relative px-7 py-3 rounded-md border-2 border-[#030f14] text-[#d0a756] font-bold cursor-pointer select-none text-[18px] transition-all duration-300 group bg-[var(--color-back)] shadow-[inset_-1px_-1px_6px_rgba(54,69,75,1),inset_12px_0px_12px_-6px_rgba(3,15,20,0),inset_-12px_0px_12px_-6px_rgba(3,15,20,0),-1px_-1px_6px_rgba(54,69,75,1)] hover:shadow-[inset_0px_-6px_18px_-6px_rgba(3,15,20,1),inset_0px_6px_18px_-6px_rgba(3,15,20,1),inset_12px_0px_12px_-6px_rgba(3,15,20,0),inset_-12px_0px_12px_-6px_rgba(3,15,20,0),-1px_-1px_6px_rgba(54,69,75,1)] active:shadow-[inset_0px_-12px_12px_-6px_rgba(3,15,20,1),inset_0px_12px_12px_-6px_rgba(3,15,20,1),inset_12px_0px_12px_-6px_rgba(3,15,20,1),inset_-12px_0px_12px_-6px_rgba(3,15,20,1),-1px_-1px_6px_rgba(54,69,75,1)]"
             >
               <span className="text-2xl">{skill.icon}</span> {skill.name}
             </button>

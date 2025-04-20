@@ -66,40 +66,53 @@ const InterviewHome = () => {
             value={experience}
             onChange={(e) => setExperience(e.target.value)}
           />
-          <button
-            onClick={handleStart}
-            className="w-full py-3 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 focus:ring-2 focus:ring-cyan-500 transition duration-200"
-          >
-            Get Started
-          </button>
+
+          {/* <div className="flex items-center justify-center h-screen"> */}
+            <div className="relative group flex items-center justify-center">
+              <button onClick={handleStart} className="relative inline-block p-px font-semibold leading-6 text-white bg-gray-800 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95">
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <span className="relative z-10 block px-6 py-3 rounded-xl bg-gray-950">
+                  <div className="relative z-10 flex items-center space-x-2">
+                    <span className="transition-all duration-500 group-hover:translate-x-1">Let's get started</span>
+                    <svg className="w-6 h-6 transition-transform duration-500 group-hover:translate-x-1" data-slot="icon" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                      <path clipRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" fillRule="evenodd" />
+                    </svg>
+                  </div>
+                </span>
+              </button>
+            </div>
+          {/* </div> */}
         </div>
 
         {/* Previous Interviews Section */}
         <h2 className="text-2xl font-semibold mb-4">Previous Interviews</h2>
 
         <ul className="space-y-4">
-          {interviews.map((int) => (
-            <li key={int._id} className="bg-[#1f1f2e] p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <p className="text-lg font-medium">🧠 <b>{int.role}</b> ({int.experience})</p>
-                  <p className="text-sm text-gray-400">📅 {new Date(int.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div className="text-cyan-400 text-lg">
-                  <p>📊 <span className="font-semibold">{int.score}/100</span></p>
-                </div>
-              </div>
-              <div className="flex justify-end">
-                <button
-                  className="text-cyan-500 hover:text-cyan-600 font-medium"
-                  onClick={() => fetchFullInterview(int._id)}
-                >
-                  View Details
-                </button>
+        {interviews.map((int) => (
+  <li key={int._id} className="relative flex flex-col isolate w-250 h-32 bg-[#29292c] rounded-xl overflow-hidden font-sans text-sm hover:after:translate-x-1 transition-all duration-300 group">
+    {/* Glow Layers */}
+    <div className="absolute w-96 h-96 -top-1/2 -left-1/2 bg-[radial-gradient(circle_closest-side,white,transparent)] opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-10" />
+    <div className="absolute w-96 h-96 -top-1/2 -left-1/2 bg-[radial-gradient(circle_closest-side,white,transparent)] opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-0" />
 
-              </div>
-            </li>
-          ))}
+    {/* Inner Card Border Layer */}
+    <div className="absolute inset-[1px] rounded-[15px] bg-[#18181b] z-20"></div>
+
+    {/* Left Glow Strip */}
+    <div className="absolute left-2 top-3 bottom-3 w-1 rounded-sm bg-gradient-to-b from-[#2eadff] via-[#3d83ff] to-[#7e61ff] z-30 transition-transform duration-300 group-hover:translate-x-[0.15rem]" />
+
+    {/* Main Card Content */}
+    <div className="relative z-40 px-4 py-3 h-full flex flex-col justify-between">
+      <div>
+        <p className="text-[#32a6ff] font-semibold text-base">🧠 <b>{int.role}</b> ({int.experience})</p>
+        <p className="text-gray-400 text-xs mt-1">📅 {new Date(int.createdAt).toLocaleDateString()}</p>
+      </div>
+      <div className="text-cyan-400 text-sm font-semibold text-right">
+        📊 {int.score}/100
+      </div>
+    </div>
+  </li>
+))}
+
         </ul>
       </div>
 

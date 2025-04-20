@@ -18,7 +18,7 @@ const StatsSection = () => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="p-6 bg-white/10 backdrop-blur-md shadow-md rounded-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              className="p-6 bg-[linear-gradient(135deg,_#0f0c29,_#302b63,_#24243e)] backdrop-blur-md shadow-md rounded-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
               <h3 className="text-5xl font-bold text-white drop-shadow-md">{stat.number}</h3>
               <p className="text-gray-200 mt-2 text-lg font-medium">{stat.label}</p>

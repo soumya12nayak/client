@@ -25,6 +25,10 @@ import AIResumeOutput from './pages/AIResumeOutput';
 import ChatPopup from "./components/ChatPopup";
 import InterviewPrep from './pages/InterviewPrep';
 import InterviewHome from './pages/InterviewHome'
+import AboutUs from "./pages/AboutUs";
+import CreateWebinar from './pages/CreateWebinar';
+import Dashboardweb from './pages/Dashboardweb'
+
 
 // import QuickLinkPage from './pages/QuickLinkPage';
 
@@ -41,6 +45,8 @@ const App = () => {
         <Route path="/membership" element={<Membership />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/webinars" element={<Webinars />} /> {/* ✅ Correct path */}
+        <Route path="/create-webinar" element={<CreateWebinar />} />
+        <Route path="/dashboard-web" element={<Dashboardweb />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/quiz/:skill" element={<Quiz />} />
         <Route path="/certificate/:skill" element={<Certificate />} />
@@ -49,6 +55,7 @@ const App = () => {
         <Route path="/ai-summary" element={<AISummaryInput />} />
         <Route path="/ai-generated-resume" element={<AIResumeOutput />} />
         <Route path="/interview" element={<InterviewPrep />} />
+        <Route path="/about" element={<AboutUs />} />
 <Route path="/interview-home" element={<InterviewHome />} />
         {/* <Route path="/:linkType" element={<QuickLinkPage />} /> */}
         <Route path='/apply-job/:id' element={<ApplyJob />} />

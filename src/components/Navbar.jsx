@@ -120,7 +120,7 @@ const Navbar = () => {
                     >
                         Contact Us
                     </Link>
-                    <div className="relative inline-block">
+                    <div className="relative inline-block m-4">
                         <Link
                             to={isPremium && isSignedIn ? "/resume" : "#"}
                             className="resu relative"

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 const InterviewHome = () => {
   const [role, setRole] = useState("");
@@ -47,7 +48,9 @@ const InterviewHome = () => {
 
 
   return (
+    <div><Navbar/>
     <div className="min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] p-6 text-white">
+      
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <h1 className="text-4xl font-bold text-center mb-8">AI Interview Prep</h1>
@@ -145,6 +148,7 @@ const InterviewHome = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

@@ -26,6 +26,7 @@ const InterviewPrep = () => {
   const [isListening, setIsListening] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [recognition, setRecognition] = useState(null);
+  const [feedbacks, setFeedbacks] = useState([]);
 
   const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || '/api';
 
@@ -193,6 +194,7 @@ const InterviewPrep = () => {
       }
 
       setFeedback(data.feedback);
+      setFeedbacks((prev) => [...prev, data.feedback]);
       setShowFeedback(true);
     } catch (err) {
       console.error("Feedback error:", err);
@@ -235,7 +237,7 @@ const InterviewPrep = () => {
       experience,
       questions,
       answers: finalAnswers,
-      feedback: [],
+      feedback: feedbacks,
       score: calculatedScore,
     };
 

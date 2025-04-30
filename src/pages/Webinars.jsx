@@ -20,7 +20,7 @@ const Webinars = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#0a192f] via-[#0f1b38] to-[#16202E] flex flex-col">
       {/* Navigation */}
       <nav className="flex justify-between items-center p-6 border-b border-[#00C9FF]/20">
-        <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#00C9FF] to-[#92FE9D]">
+        <div onClick={() => navigate("/")} className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#00C9FF] to-[#92FE9D] cursor-pointer">
           CareerGenie WebinarHub
         </div>
         {isSignedIn ? (

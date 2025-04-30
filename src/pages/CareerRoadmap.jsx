@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { generateRoadmap } from "../utils/generateRoadmap";
+import Navbar from "../components/Navbar";
 
 const CareerRoadmap = () => {
   const [dreamJob, setDreamJob] = useState('');
@@ -21,12 +22,13 @@ const CareerRoadmap = () => {
 
   return (
     <div className="min-h-screen text-white relative overflow-hidden font-mono">
+      <Navbar/>
       {/* Background Glow Effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a1a] to-[#1e0333] z-[-1]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.1)_0%,transparent_70%)] animate-pulse-slow"></div>
       </div>
 
-      <div className="max-w-4xl mx-auto bg-gray-900/20 p-6 sm:p-8 rounded-xl border border-cyan-500/50 backdrop-blur-sm">
+      <div className="max-w-4xl mx-auto bg-gray-900/20 p-6 sm:p-8 rounded-xl border border-cyan-500/50 backdrop-blur-sm mt-6">
         <h1 className="text-4xl sm:text-5xl font-bold text-cyan-300 tracking-tight mb-8 text-center animate-pulse-slow shadow-cyan">
           🚀 Career Roadmap Generator
         </h1>

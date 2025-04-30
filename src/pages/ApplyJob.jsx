@@ -12,6 +12,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useAuth } from '@clerk/clerk-react'
 import SalaryInsights from "../components/SalaryInsights";
+import { useUser } from "@clerk/clerk-react";
 
 
 const ApplyJob = () => {
@@ -21,6 +22,7 @@ const ApplyJob = () => {
   const { getToken } = useAuth()
 
   const navigate = useNavigate()
+  const { user } = useUser();
 
   const [JobData, setJobData] = useState(null)
   const [isAlreadyApplied, setIsAlreadyApplied] = useState(false)
@@ -28,6 +30,8 @@ const ApplyJob = () => {
 
 
   const { jobs, backendUrl, userData, userApplications, fetchUserApplications } = useContext(AppContext)
+
+
 
   useEffect(() => {
     setIsPremium(localStorage.getItem("isPremium") === "true");
@@ -201,90 +205,118 @@ const ApplyJob = () => {
 
               {/* Apply Button Below Description */}
               <button
-  className={`relative inline-flex items-center justify-center gap-4 group mt-5 ${isAlreadyApplied ? "opacity-50 cursor-not-allowed" : ""}`}
-  onClick={applyHandler}
-  disabled={isAlreadyApplied}
->
-  <div
-    className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
-  ></div>
-  <span
-    className="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
-  >
-    {isAlreadyApplied ? "✅ Already Applied" : "🚀 Apply Now"}
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 10 10"
-      height="10"
-      width="10"
-      fill="none"
-      className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
-    >
-      <path
-        d="M0 5h7"
-        className="transition opacity-0 group-hover:opacity-100"
-      ></path>
-      <path
-        d="M1 1l4 4-4 4"
-        className="transition group-hover:translate-x-[3px]"
-      ></path>
-    </svg>
-  </span>
-</button>
+                className={`relative inline-flex items-center justify-center gap-4 group mt-5 ${isAlreadyApplied ? "opacity-50 cursor-not-allowed" : ""}`}
+                onClick={applyHandler}
+                disabled={isAlreadyApplied}
+              >
+                <div
+                  className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"
+                ></div>
+                <span
+                  className="group relative inline-flex items-center justify-center text-base rounded-xl bg-gray-900 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+                >
+                  {isAlreadyApplied ? "✅ Already Applied" : "🚀 Apply Now"}
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 10 10"
+                    height="10"
+                    width="10"
+                    fill="none"
+                    className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
+                  >
+                    <path
+                      d="M0 5h7"
+                      className="transition opacity-0 group-hover:opacity-100"
+                    ></path>
+                    <path
+                      d="M1 1l4 4-4 4"
+                      className="transition group-hover:translate-x-[3px]"
+                    ></path>
+                  </svg>
+                </span>
+              </button>
 
               {/* Why Join Us? Section */}
               <div className="mt-10 p-6 bg-gradient-to-r from-indigo-900 via-purple-800 to-black rounded-lg shadow-lg border border-indigo-500/50">
 
 
-                {/* Recruiter Contact Section (Locked for Non-Premium Users) */}
+                {/* Recruiter Contact Section */}
                 <div className="mt-6 p-6 bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-lg shadow-lg border border-indigo-500/50">
                   <h2 className="text-2xl font-bold mb-4 text-cyan-300">📧 Contact Recruiter</h2>
 
-                  {!isPremium ? (
-                    // If user is premium, show email
-                    <div className="flex flex-col items-center text-center">
-                      <p className="text-gray-400">🔒 Unlock premium membership to access direct recruiter details.</p>
-                      <button
-                        onClick={() => navigate('/membership')}
-                        className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-2 px-6 rounded-full shadow-md hover:scale-105 transition-all"
-                      >
-                        🚀 Unlock Now
-                      </button>
-                    </div>
-                  ) : (
-                    // If user is NOT premium, show locked message
-
-                    <>
-                      <p className="text-gray-300">Have questions about the job? Reach out to the recruiter.</p>
-                      <div className="mt-4 flex items-center gap-4">
-                        <input
-                          type="text"
-                          value={JobData.companyId.email}
-                          readOnly
-                          className="w-full bg-gray-900 text-gray-300 px-4 py-2 rounded-md border border-gray-700 focus:outline-none"
-                        />
+                  {/* Conditionally show contact details if user is logged in */}
+                  {user ? (
+                    !isPremium ? (
+                      // If the user is NOT premium, show the locked message
+                      <div className="flex flex-col items-center text-center">
+                        <p className="text-gray-400">🔒 Unlock premium membership to access direct recruiter details.</p>
                         <button
-                          onClick={() => {
-                            navigator.clipboard.writeText(JobData.companyId.email);
-                            toast.success("Recruiter email copied!");
-                          }}
-                          className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md shadow-md transition-all"
+                          onClick={() => navigate('/membership')}
+                          className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-2 px-6 rounded-full shadow-md hover:scale-105 transition-all"
                         >
-                          📋 Copy
+                          🚀 Unlock Now
                         </button>
                       </div>
-                      <a
-                        href={`mailto:${JobData.companyId.email}`}
-                        className="mt-3 block text-cyan-400 hover:underline"
-                      >
-                        ✉️ Send Email
-                      </a>
-                    </>
+                    ) : (
+                      // If the user is premium, show the recruiter contact info
+                      <>
+                        <p className="text-gray-300">Have questions about the job? Reach out to the recruiter.</p>
+                        <div className="mt-4 flex items-center gap-4">
+                          <input
+                            type="text"
+                            value={JobData.companyId.email}
+                            readOnly
+                            className="w-full bg-gray-900 text-gray-300 px-4 py-2 rounded-md border border-gray-700 focus:outline-none"
+                          />
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(JobData.companyId.email);
+                              toast.success("Recruiter email copied!");
+                            }}
+                            className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-md shadow-md transition-all"
+                          >
+                            📋 Copy
+                          </button>
+                        </div>
+                        <a
+                          href={`mailto:${JobData.companyId.email}`}
+                          className="mt-3 block text-cyan-400 hover:underline"
+                        >
+                          ✉️ Send Email
+                        </a>
+                      </>
+                    )
+                  ) : (
+                    <p className="text-gray-400">Please log in to access recruiter contact details.</p> // Message for logged-out users
                   )}
                 </div>
 
 
-                <SalaryInsights salaryData={jobs.filter(job => job.category === JobData.category)} isPremium={userData?.isPremium} />
+
+                {/* Salary Insights Section */}
+{user ? (
+  isPremium ? (
+    <SalaryInsights
+      salaryData={jobs.filter(job => job.category === JobData.category)}
+      isPremium={userData?.isPremium}
+    />
+  ) : (
+    <div className="mt-6 p-6 bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-lg shadow-lg border border-indigo-500/50">
+      <p className="text-gray-400">🔒 Unlock premium membership to view detailed salary insights.</p>
+      <button
+        onClick={() => navigate('/membership')}
+        className="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-2 px-6 rounded-full shadow-md hover:scale-105 transition-all"
+      >
+        🚀 Unlock Now
+      </button>
+    </div>
+  )
+) : (
+  <div className="mt-6 p-6 bg-gradient-to-r from-gray-900 via-gray-800 to-black rounded-lg shadow-lg border border-indigo-500/50">
+                  <h2 className="text-2xl font-bold mb-4 text-yellow-300">💰📊 Salary Insights</h2>
+  <p className="text-gray-400">Please log in to access salary insights.</p></div>
+)}
+
 
               </div>
             </div>

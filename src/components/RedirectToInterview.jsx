@@ -1,8 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { FaRocket, FaCommentAlt, FaUserGraduate } from "react-icons/fa"; // Importing icons from react-icons
+import { FaRocket, FaCommentAlt, FaUserGraduate, FaLock } from "react-icons/fa"; // Import the FaLock icon
+// Importing icons from react-icons
+import { useUser } from "@clerk/clerk-react";
+import { toast } from "react-toastify";
 
 const RedirectToInterview = () => {
+  const { user } = useUser();
   const navigate = useNavigate();
+
+  const handleStartClick = () => {
+    if (!user) {
+      toast.error("Please log in to start your interview");
+      return;
+    }
+    navigate("/interview-home");
+  };
+
 
   return (
     <div className="container 2xl:px-20 mx-auto my-20">
@@ -45,13 +58,22 @@ const RedirectToInterview = () => {
         {/* CTA Button */}
         <div className="mt-8 flex justify-center">
           <button
-            onClick={() => navigate("/interview-home")}
+            onClick={handleStartClick}
             className="relative inline-flex items-center justify-center px-1 py-1 min-w-[140px] text-white text-lg font-medium rounded-lg bg-gradient-to-r from-[#af40ff] via-[#5b42f3] to-[#00ddeb] shadow-[0_15px_30px_-5px_rgba(151,65,252,0.2)] transition-transform duration-300 hover:scale-95"
           >
             <span className="bg-[#05062d] rounded-md px-6 py-4 w-full h-full transition-all duration-300 group-hover:bg-transparent">
-              Start Interview 🚀
+              {user ? (
+                "Start Interview 🚀"
+              ) : (
+                <>
+                  <FaLock className="inline-block mr-2 text-yellow-400" />
+                  Please Log In
+                </>
+              )}
             </span>
           </button>
+
+
         </div>
 
       </div>

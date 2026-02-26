@@ -26,51 +26,62 @@ const ChatPopup = () => {
 
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+  if (!input.trim()) return;
 
-    const newMessage = { sender: "user", text: input };
-    const updatedMessages = [...messages, newMessage];
-    setMessages(updatedMessages);
-    setInput("");
-    setIsTyping(true);
-    sendAudioRef.current?.play();
+  const newMessage = { sender: "user", text: input };
+  const updatedMessages = [...messages, newMessage];
+  setMessages(updatedMessages);
+  setInput("");
+  setIsTyping(true);
+  sendAudioRef.current?.play();
 
-    const systemPrompt = {
-      role: "system",
-      content: `You are CareerGenie AI, a smart career assistant for a job portal named CareerGenie. 
-    CareerGenie helps users with job searching, resume building, AI-generated resumes, skill assessments with certifications, career roadmap generation, and video resume submissions. 
-    You can answer questions about career paths, resume tips, how to apply to jobs, and how CareerGenie can help users in their job journey.
-    Career Genie also have a premium membership plan for 499 rupees and buying it will give the users various perks, the perks are ai generated resume,exclusive job listing,recruiter contact details,exclusive career webinars etc. give all these info in about 3 to 4 lines.`, // truncated for brevity
-    };
+  const systemPrompt = {
+    role: "system",
+    content: `You are CareerGenie AI, a smart career assistant for a job portal named CareerGenie.
+CareerGenie helps users with job searching, resume building, AI-generated resumes, skill assessments with certifications, career roadmap generation, and video resume submissions.
+You can answer questions about career paths, resume tips, how to apply to jobs, and how CareerGenie can help users in their job journey.
+Career Genie also has a premium membership plan for 499 rupees that includes AI resume generation, exclusive job listings, recruiter contact details, and career webinars. Explain in 3-4 lines.`,
+  };
 
-    const updatedMessagesWithSystem = [
-      systemPrompt,
-      ...updatedMessages.map((msg) => ({
-        role: msg.sender === "user" ? "user" : "assistant",
-        content: msg.text,
-      })),
-    ];
+  const updatedMessagesWithSystem = [
+    systemPrompt,
+    ...updatedMessages.map((msg) => ({
+      role: msg.sender === "user" ? "user" : "assistant",
+      content: msg.text,
+    })),
+  ];
 
-    try {
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_BACKEND_URL}/api/ai/chat`,
+      {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "deepseek/deepseek-chat:free",
           messages: updatedMessagesWithSystem,
         }),
-      });
+      }
+    );
 
-      const data = await response.json();
-      const botReply = data.choices[0].message.content;
-      const finalMessages = [...updatedMessages, { sender: "bot", text: botReply }];
-      setMessages(finalMessages);
-      receiveAudioRef.current?.play();
+    if (!response.ok) {
+      throw new Error("Backend chat request failed");
+    }
+
+    const data = await response.json();
+    const botReply = data.reply;
+
+    const finalMessages = [
+      ...updatedMessages,
+      { sender: "bot", text: botReply },
+    ];
+
+    setMessages(finalMessages);
+    receiveAudioRef.current?.play();
 
       // ✅ Save to MongoDB
+      
       await fetch("https://career-genie-server.vercel.app/api/chat", {
         method: "POST",
         headers: {
@@ -155,7 +166,7 @@ const ChatPopup = () => {
                 {/* Sci-Fi Typing Animation (White Only) */}
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div class="lds-ellipsis"><div></div><div></div><div></div></div>
+                    <div className="lds-ellipsis"></div>
                   </div>
                 )}
 
